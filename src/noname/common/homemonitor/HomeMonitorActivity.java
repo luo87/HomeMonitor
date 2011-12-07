@@ -1,6 +1,8 @@
 package noname.common.homemonitor;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +42,10 @@ public class HomeMonitorActivity extends Activity {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()){
 			case 1:
+	             // When the user center presses, let them pick a contact.
+	             startActivity(
+	                 new Intent(Intent.ACTION_PICK));
+
 				break;
 			case 2:
 				break;
