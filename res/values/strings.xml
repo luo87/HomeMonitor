@@ -3,5 +3,8 @@
 
     <string name="hello">Hello World, HomeMonitorActivity!</string>
     <string name="app_name">家庭监视器</string>
+    <string name="begin_monitor">开始监控</string>
+    <string name="end_monitor">停止监控</string>
+    <string name="setting">设置</string>
 
 </resources>
