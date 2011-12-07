@@ -4,13 +4,16 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder mHolder;
 	private Camera mCamera;
+	private PictureCallback mPicture = null;
 
 	public CameraView(Context context, Camera camera) {
 		super(context);
@@ -31,12 +34,14 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			mCamera.setPreviewDisplay(holder);
 			mCamera.startPreview();
 		} catch (IOException e) {
-			Log.d(VIEW_LOG_TAG, "Error setting camera preview: " + e.getMessage());
+			Log.d(VIEW_LOG_TAG,
+					"Error setting camera preview: " + e.getMessage());
 		}
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// empty. Take care of releasing the Camera preview in your activity.
+		mCamera.release();
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -64,7 +69,20 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			mCamera.startPreview();
 
 		} catch (Exception e) {
-			Log.d(VIEW_LOG_TAG, "Error starting camera preview: " + e.getMessage());
+			Log.d(VIEW_LOG_TAG,
+					"Error starting camera preview: " + e.getMessage());
 		}
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		try {
+			mCamera.takePicture(null, null, mPicture);
+		} catch (Exception e) {
+			return false;
+		}
+		mCamera.startPreview();
+		return super.onTouchEvent(event);
 	}
 }

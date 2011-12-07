@@ -4,9 +4,9 @@
     android:layout_height="fill_parent"
     android:baselineAligned="true"
     android:orientation="horizontal" >
-
-    <SurfaceView
-        android:id="@+id/surfaceView1"
+    
+    <FrameLayout
+        android:id="@+id/layout1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
