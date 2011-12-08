@@ -45,12 +45,12 @@ public class HomeMonitorActivity extends Activity {
 		switch (item.getItemId()){
 			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
+				break;
+			case SETTING_MENU:
 //	             startActivity(new Intent(Intent.ACTION_PICK));
 				Intent t = new Intent();
 				t.setClass(this, SettingActivity.class);
 				startActivity(t);
-				break;
-			case SETTING_MENU:
 				break;
 			default:
 				break;
