@@ -14,6 +14,8 @@ import android.hardware.Camera;
 public class HomeMonitorActivity extends Activity {
 	private Camera mCamera;
 	private CameraView mPreview;
+	public static final int MONITOR_MENU = 1;
+	public static final int SETTING_MENU = 2;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -32,8 +34,8 @@ public class HomeMonitorActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
-		menu.add(Menu.NONE, 1, Menu.NONE, R.string.begin_monitor);
-		menu.add(Menu.NONE, 2, Menu.NONE, R.string.setting);
+		menu.add(Menu.NONE, MONITOR_MENU, Menu.NONE, R.string.begin_monitor);
+		menu.add(Menu.NONE, SETTING_MENU, Menu.NONE, R.string.setting);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -41,17 +43,32 @@ public class HomeMonitorActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()){
-			case 1:
+			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
-	             startActivity(
-	                 new Intent(Intent.ACTION_PICK));
-
+//	             startActivity(new Intent(Intent.ACTION_PICK));
+				Intent t = new Intent();
+				t.setClass(this, SettingActivity.class);
+				startActivity(t);
 				break;
-			case 2:
+			case SETTING_MENU:
 				break;
 			default:
 				break;
 		}
 		return super.onMenuItemSelected(featureId, item);
+	}
+
+	private void startActivity(HomeMonitorActivity homeMonitorActivity,
+			Class<SettingActivity> class1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		mCamera.release();
+		super.onDestroy();
 	}
 }

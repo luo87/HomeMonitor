@@ -41,7 +41,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// empty. Take care of releasing the Camera preview in your activity.
-		mCamera.release();
+		mCamera.stopPreview();
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -73,7 +73,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					"Error starting camera preview: " + e.getMessage());
 		}
 	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
