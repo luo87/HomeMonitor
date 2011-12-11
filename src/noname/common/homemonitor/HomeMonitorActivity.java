@@ -2,11 +2,9 @@ package noname.common.homemonitor;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.widget.FrameLayout;
 
 import android.hardware.Camera;
@@ -58,11 +56,6 @@ public class HomeMonitorActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void startActivity(HomeMonitorActivity homeMonitorActivity,
-			Class<SettingActivity> class1) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
