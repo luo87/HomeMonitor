@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.hardware.Camera;
 
 public class HomeMonitorActivity extends Activity {
-	private Camera mCamera;
+	public static Camera mCamera;
 	private CameraView mPreview;
 	public static final int MONITOR_MENU = 1;
 	public static final int SETTING_MENU = 2;
