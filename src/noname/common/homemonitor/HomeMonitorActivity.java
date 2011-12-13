@@ -1,6 +1,8 @@
 package noname.common.homemonitor;
 
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,10 +11,12 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 
 public class HomeMonitorActivity extends Activity {
 	public static Camera mCamera = null;
 	private CameraView mPreview;
+	
 	public static final int MONITOR_MENU = 1;
 	public static final int SETTING_MENU = 2;
 
@@ -48,7 +52,17 @@ public class HomeMonitorActivity extends Activity {
 		switch (item.getItemId()){
 			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
-				Monitor.begin();
+				Monitor m = new Monitor();
+				mCamera.takePicture(null, null, mPicture);
+				ProgressDialog dialog = ProgressDialog.show(this, "", 
+                        "Loading. Please wait...", true);
+				if (!m.connect()){
+					Toast.makeText(this, R.string.connect_error, Toast.LENGTH_LONG).show();
+					dialog.cancel();
+					return false;
+				}
+				m.begin();
+				dialog.cancel();
 				break;
 			case SETTING_MENU:
 //	             startActivity(new Intent(Intent.ACTION_PICK));
@@ -89,4 +103,19 @@ public class HomeMonitorActivity extends Activity {
 		}
 		super.onStop();
 	}
+	private PictureCallback mPicture = new PictureCallback(){
+
+		@Override
+		public void onPictureTaken(byte[] data, Camera camera) {
+			// TODO Auto-generated method stub
+			try {
+				Monitor.upload(data);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			camera.startPreview();
+		}
+		
+	};
 }
