@@ -18,7 +18,10 @@ public class Monitor extends Handler {
 		return true;
 	}
 
-	public static boolean upload(byte[] data){
+	public boolean upload(byte[] data) throws IOException{
+		if (socket == null){
+			throw new IOException();
+		}
 		try {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			dos.write(data);

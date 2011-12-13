@@ -16,6 +16,7 @@ import android.hardware.Camera.PictureCallback;
 public class HomeMonitorActivity extends Activity {
 	public static Camera mCamera = null;
 	private CameraView mPreview;
+	private Monitor mMonitor;
 	
 	public static final int MONITOR_MENU = 1;
 	public static final int SETTING_MENU = 2;
@@ -52,16 +53,16 @@ public class HomeMonitorActivity extends Activity {
 		switch (item.getItemId()){
 			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
-				Monitor m = new Monitor();
+				mMonitor = new Monitor();
 				mCamera.takePicture(null, null, mPicture);
 				ProgressDialog dialog = ProgressDialog.show(this, "", 
                         "Loading. Please wait...", true);
-				if (!m.connect()){
+				if (!mMonitor.connect()){
 					Toast.makeText(this, R.string.connect_error, Toast.LENGTH_LONG).show();
 					dialog.cancel();
 					return false;
 				}
-				m.begin();
+				mMonitor.begin();
 				dialog.cancel();
 				break;
 			case SETTING_MENU:
@@ -92,24 +93,24 @@ public class HomeMonitorActivity extends Activity {
 //		super.onStart();
 //	}
 
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		try{
-			mCamera.release();
-		}catch (Exception e){
-			Toast.makeText(this, R.string.camera_realse_error, Toast.LENGTH_LONG).show();
-			finish();
-		}
-		super.onStop();
-	}
+//	@Override
+//	protected void onStop() {
+//		// TODO Auto-generated method stub
+//		try{
+//			mCamera.release();
+//		}catch (Exception e){
+//			Toast.makeText(this, R.string.camera_realse_error, Toast.LENGTH_LONG).show();
+//			finish();
+//		}
+//		super.onStop();
+//	}
 	private PictureCallback mPicture = new PictureCallback(){
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			// TODO Auto-generated method stub
 			try {
-				Monitor.upload(data);
+				mMonitor.upload(data);
 
 			} catch (Exception e) {
 				e.printStackTrace();
