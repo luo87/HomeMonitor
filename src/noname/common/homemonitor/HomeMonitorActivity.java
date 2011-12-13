@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import android.hardware.Camera;
 
 public class HomeMonitorActivity extends Activity {
-	public static Camera mCamera;
+	public static Camera mCamera = null;
 	private CameraView mPreview;
 	public static final int MONITOR_MENU = 1;
 	public static final int SETTING_MENU = 2;
@@ -20,8 +21,12 @@ public class HomeMonitorActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		mCamera = Camera.open();
+		try{
+			mCamera = Camera.open();
+		}catch(Exception e){
+			Toast.makeText(this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
+			finish();
+		}
 
 		mPreview = new CameraView(this, mCamera);
 		FrameLayout preview = (FrameLayout) findViewById(R.id.layout1);
@@ -43,6 +48,7 @@ public class HomeMonitorActivity extends Activity {
 		switch (item.getItemId()){
 			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
+				Monitor.begin();
 				break;
 			case SETTING_MENU:
 //	             startActivity(new Intent(Intent.ACTION_PICK));
@@ -56,12 +62,31 @@ public class HomeMonitorActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-
+//	@Override
+//	protected void onStart() {
+//		// TODO Auto-generated method stub
+//		try{
+//			mCamera = Camera.open();
+//		}catch(Exception e){
+//			finish();
+//		}
+//
+//		mPreview = new CameraView(this, mCamera);
+//		FrameLayout preview = (FrameLayout) findViewById(R.id.layout1);
+//
+//		preview.addView(mPreview);
+//		super.onStart();
+//	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
 		// TODO Auto-generated method stub
-		mCamera.release();
-		super.onDestroy();
+		try{
+			mCamera.release();
+		}catch (Exception e){
+			Toast.makeText(this, R.string.camera_realse_error, Toast.LENGTH_LONG).show();
+			finish();
+		}
+		super.onStop();
 	}
 }

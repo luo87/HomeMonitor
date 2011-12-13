@@ -6,5 +6,8 @@
     <string name="begin_monitor">开始监控</string>
     <string name="end_monitor">停止监控</string>
     <string name="setting">设置</string>
+    <string name="camera_realse_error">摄像头释放失败</string>
+    <string name="camera_open_error">摄像头开启失败</string>
+    <string name="connect_error">服务器连接失败</string>
 
 </resources>

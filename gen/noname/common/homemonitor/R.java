@@ -24,6 +24,9 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f040001;
         public static final int begin_monitor=0x7f040002;
+        public static final int camera_open_error=0x7f040006;
+        public static final int camera_realse_error=0x7f040005;
+        public static final int connect_error=0x7f040007;
         public static final int end_monitor=0x7f040003;
         public static final int hello=0x7f040000;
         public static final int setting=0x7f040004;
