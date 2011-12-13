@@ -32,7 +32,7 @@ public class HomeMonitorActivity extends Activity {
 			Toast.makeText(this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
 			finish();
 		}
-
+		mMonitor = new Monitor();
 		mPreview = new CameraView(this, mCamera);
 		FrameLayout preview = (FrameLayout) findViewById(R.id.layout1);
 
@@ -53,7 +53,7 @@ public class HomeMonitorActivity extends Activity {
 		switch (item.getItemId()){
 			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
-				mMonitor = new Monitor();
+				
 				mCamera.takePicture(null, null, mPicture);
 				ProgressDialog dialog = ProgressDialog.show(this, "", 
                         "Loading. Please wait...", true);
@@ -106,7 +106,6 @@ public class HomeMonitorActivity extends Activity {
 //	}
 	private PictureCallback mPicture = new PictureCallback(){
 
-		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			// TODO Auto-generated method stub
 			try {
