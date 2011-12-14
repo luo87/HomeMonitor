@@ -87,6 +87,13 @@ public class HomeMonitorActivity extends Activity {
 	}
 
 	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		mMonitor.cancel();
+		super.onStop();
+	}
+
+	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		mCamera.release();
