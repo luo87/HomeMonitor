@@ -1,26 +1,49 @@
-package noname.common.homemonitor;
+package com.noname.homemonitor;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import android.os.Handler;
+import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 
-public class Monitor extends Handler {
-	private static Socket socket = null;
-	private static String server_address = "imnoname.com";
-	private static int server_port = 17840;
-	public boolean begin(){
+//import android.os.Handler;
+
+public class Monitor {
+	private  Socket socket = null;
+	private  String server_address = "imnoname.com";
+	private  int server_port = 17840;
+	private Timer t = new Timer();
+	public boolean begin(final Camera mCamera, final PictureCallback mPicture){
+//		if (!socket.isConnected()){
+//			connect();
+//		}
+		TimerTask task = new TimerTask(){
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				mCamera.takePicture(null, null, mPicture);
+			}
+			
+		};
+		t.schedule(task, 5000, 5000);
 		return true;
 	}
 	
-	public boolean end(){
+	public boolean cancel(){
+		t.cancel();
 		return true;
 	}
 
 	public boolean upload(byte[] data) throws IOException{
-		if (socket == null){
-			throw new IOException();
+		boolean tmp = socket.isClosed();
+		if (tmp){
+			
+			
+			connect();
 		}
 		try {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());

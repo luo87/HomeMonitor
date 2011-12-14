@@ -1,14 +1,15 @@
-package noname.common.homemonitor;
+package com.noname.homemonitor;
 
 
+import com.noname.homemonitor.R;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
 
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -17,9 +18,10 @@ public class HomeMonitorActivity extends Activity {
 	public static Camera mCamera = null;
 	private CameraView mPreview;
 	private Monitor mMonitor;
+	private boolean Monitoring = false;
 	
-	public static final int MONITOR_MENU = 1;
-	public static final int SETTING_MENU = 2;
+	public  final int MONITOR_MENU = 1;
+	public  final int SETTING_MENU = 2;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -53,17 +55,24 @@ public class HomeMonitorActivity extends Activity {
 		switch (item.getItemId()){
 			case MONITOR_MENU:
 	             // When the user center presses, let them pick a contact.
-				
-				mCamera.takePicture(null, null, mPicture);
-				ProgressDialog dialog = ProgressDialog.show(this, "", 
-                        "Loading. Please wait...", true);
-				if (!mMonitor.connect()){
-					Toast.makeText(this, R.string.connect_error, Toast.LENGTH_LONG).show();
-					dialog.cancel();
-					return false;
+				Monitoring = !Monitoring;
+				if (Monitoring){
+					new Thread(new Runnable() {
+						public void run() {
+							
+							setPic(mCamera);
+							mCamera.takePicture(null, null, mPicture);
+//				ProgressDialog dialog = ProgressDialog.show(this, "", 
+//                        "Loading. Please wait...", true);
+							mMonitor.begin(mCamera, mPicture);
+						}
+					}).start();
+					item.setTitle(R.string.end_monitor);
+				}else {
+					mMonitor.cancel();
+					item.setTitle(R.string.begin_monitor);
 				}
-				mMonitor.begin();
-				dialog.cancel();
+
 				break;
 			case SETTING_MENU:
 //	             startActivity(new Intent(Intent.ACTION_PICK));
@@ -77,33 +86,13 @@ public class HomeMonitorActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-//	@Override
-//	protected void onStart() {
-//		// TODO Auto-generated method stub
-//		try{
-//			mCamera = Camera.open();
-//		}catch(Exception e){
-//			finish();
-//		}
-//
-//		mPreview = new CameraView(this, mCamera);
-//		FrameLayout preview = (FrameLayout) findViewById(R.id.layout1);
-//
-//		preview.addView(mPreview);
-//		super.onStart();
-//	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		mCamera.release();
+		super.onPause();
+	}
 
-//	@Override
-//	protected void onStop() {
-//		// TODO Auto-generated method stub
-//		try{
-//			mCamera.release();
-//		}catch (Exception e){
-//			Toast.makeText(this, R.string.camera_realse_error, Toast.LENGTH_LONG).show();
-//			finish();
-//		}
-//		super.onStop();
-//	}
 	private PictureCallback mPicture = new PictureCallback(){
 
 		public void onPictureTaken(byte[] data, Camera camera) {
@@ -118,4 +107,11 @@ public class HomeMonitorActivity extends Activity {
 		}
 		
 	};
+	private Camera setPic(Camera m){
+		Camera.Parameters mPar = m.getParameters();
+		mPar.setPictureSize(320, 240);
+//		mPar.setPictureFormat(PixelFormat.RGB_332);
+		m.setParameters(mPar);
+		return m;
+	}
 }

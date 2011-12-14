@@ -1,4 +1,4 @@
-package noname.common.homemonitor;
+package com.noname.homemonitor;
 
 import java.io.IOException;
 

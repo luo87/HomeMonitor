@@ -1,5 +1,6 @@
-package noname.common.homemonitor;
+package com.noname.homemonitor;
 
+import com.noname.homemonitor.R;
 import android.app.Activity;
 import android.os.Bundle;
 
