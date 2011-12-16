@@ -1,13 +1,14 @@
 package com.noname.homemonitor;
 
 
+import java.util.TimerTask;
+
 import com.noname.homemonitor.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
@@ -27,18 +28,15 @@ public class HomeMonitorActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		try{
-			mCamera = Camera.open();
-		}catch(Exception e){
-			Toast.makeText(this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
-			finish();
-		}
+//		try{
+//			mCamera = Camera.open();
+//		}catch(Exception e){
+//			Toast.makeText(this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
+//			finish();
+//		}
 		mMonitor = new Monitor();
-		mPreview = new CameraView(this, mCamera);
-		FrameLayout preview = (FrameLayout) findViewById(R.id.layout1);
+		
 
-		preview.addView(mPreview);
 	}
 
 	@Override
@@ -57,25 +55,19 @@ public class HomeMonitorActivity extends Activity {
 	             // When the user center presses, let them pick a contact.
 				Monitoring = !Monitoring;
 				if (Monitoring){
-					new Thread(new Runnable() {
-						public void run() {
-							
-							setPic(mCamera);
-							mCamera.takePicture(null, null, mPicture);
-//				ProgressDialog dialog = ProgressDialog.show(this, "", 
-//                        "Loading. Please wait...", true);
-							mMonitor.begin(mCamera, mPicture);
-						}
-					}).start();
+					setPic(mCamera);
+//					mCamera.takePicture(null, null, mPicture);
+					mMonitor.begin(task);
 					item.setTitle(R.string.end_monitor);
 				}else {
 					mMonitor.cancel();
 					item.setTitle(R.string.begin_monitor);
 				}
-
 				break;
 			case SETTING_MENU:
 //	             startActivity(new Intent(Intent.ACTION_PICK));
+				mCamera.stopPreview();
+				mCamera.release();
 				Intent t = new Intent();
 				t.setClass(this, SettingActivity.class);
 				startActivity(t);
@@ -87,17 +79,26 @@ public class HomeMonitorActivity extends Activity {
 	}
 
 	@Override
-	protected void onStop() {
+	protected void onStart() {
 		// TODO Auto-generated method stub
-		mMonitor.cancel();
-		super.onStop();
+		try{
+			mCamera = Camera.open();
+		}catch(Exception e){
+			Toast.makeText(this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
+			finish();
+		}
+		mPreview = new CameraView(this, mCamera);
+		setContentView(mPreview);
+		super.onStart();
 	}
 
 	@Override
-	protected void onPause() {
+	protected void onStop() {
 		// TODO Auto-generated method stub
+		mMonitor.cancel();
+//		mCamera.stopPreview();
 		mCamera.release();
-		super.onPause();
+		super.onStop();
 	}
 
 	private PictureCallback mPicture = new PictureCallback(){
@@ -108,6 +109,8 @@ public class HomeMonitorActivity extends Activity {
 				mMonitor.upload(data);
 
 			} catch (Exception e) {
+				Toast.makeText(HomeMonitorActivity.this, R.string.connect_error, Toast.LENGTH_LONG).show();
+				mMonitor.cancel();
 				e.printStackTrace();
 			}
 			camera.startPreview();
@@ -121,4 +124,13 @@ public class HomeMonitorActivity extends Activity {
 		m.setParameters(mPar);
 		return m;
 	}
+	public TimerTask task = new TimerTask(){
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			mCamera.takePicture(null, null, mPicture);
+		}
+		
+	};
 }

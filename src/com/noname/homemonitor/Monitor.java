@@ -3,11 +3,10 @@ package com.noname.homemonitor;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
 
 //import android.os.Handler;
 
@@ -16,20 +15,12 @@ public class Monitor {
 	private  String server_address = "imnoname.com";
 	private  int server_port = 17840;
 	private Timer t = new Timer();
-	public boolean begin(final Camera mCamera, final PictureCallback mPicture){
+	public boolean begin(TimerTask task){
 //		if (!socket.isConnected()){
 //			connect();
 //		}
-		TimerTask task = new TimerTask(){
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				mCamera.takePicture(null, null, mPicture);
-			}
-			
-		};
-		t.schedule(task, 5000, 5000);
+
+		t.schedule(task, 0, 5000);
 		return true;
 	}
 	
@@ -39,25 +30,24 @@ public class Monitor {
 	}
 
 	public boolean upload(byte[] data) throws IOException{
-		boolean tmp = socket.isClosed();
-		if (tmp){
-			
-			
-			connect();
+//		if (socket == null){
+		if (!connect()){
+			throw new IOException();
 		}
+//		}
 		try {
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			dos.write(data);
 			dos.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			try {
-				socket.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
+		}
+		try {
+			socket.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		return true;
 	}
@@ -65,7 +55,8 @@ public class Monitor {
 	public boolean connect() {
 		// TODO Auto-generated method stub
 		try{
-			socket = new Socket(server_address, server_port);
+			socket = new Socket();
+			socket.connect(new SocketAddress(), 3000, 3000);
 		}catch (Exception e) {
 			// TODO: handle exception
 //			Toast.makeText(HomeMonitorActivity.this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
