@@ -7,6 +7,7 @@ import com.noname.homemonitor.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -66,11 +67,18 @@ public class HomeMonitorActivity extends Activity {
 				break;
 			case SETTING_MENU:
 //	             startActivity(new Intent(Intent.ACTION_PICK));
-				mCamera.stopPreview();
-				mCamera.release();
-				Intent t = new Intent();
-				t.setClass(this, SettingActivity.class);
-				startActivity(t);
+//				mCamera.stopPreview();
+//				mCamera.release();
+//				Intent t = new Intent();
+				Intent launchPreferencesIntent = new Intent().setClass(this, Setting.class);
+				try{
+					startActivityForResult(launchPreferencesIntent, 1);
+				}catch (Exception e){
+					Log.e("settingBtn_error", e.getMessage());
+					return false;
+				}
+
+//				startActivity(launchPreferencesIntent);
 				break;
 			default:
 				break;
@@ -95,9 +103,13 @@ public class HomeMonitorActivity extends Activity {
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
+		try{
 		mMonitor.cancel();
 //		mCamera.stopPreview();
 		mCamera.release();
+		}catch (Exception e){
+			Log.e("release camera error", e.getMessage());
+		}
 		super.onStop();
 	}
 

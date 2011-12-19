@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, HomeMonitorActivity!</string>
     <string name="app_name">家庭监视器</string>
     <string name="begin_monitor">开始监控</string>
     <string name="end_monitor">停止监控</string>
@@ -9,5 +8,7 @@
     <string name="camera_realse_error">摄像头释放失败</string>
     <string name="camera_open_error">摄像头开启失败</string>
     <string name="connect_error">服务器连接失败</string>
+    <string name="setting_freq">监控间隔</string>
+    <string name="setting_freq_summary">拍照监控间隔时间(s)</string>
 
 </resources>

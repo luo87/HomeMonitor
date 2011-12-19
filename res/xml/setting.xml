@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <EditTextPreference android:title="@string/setting_freq" android:summary="@string/setting_freq_summary" android:key="freq" android:selectable="true" android:shouldDisableView="false" android:enabled="true"/>
+
+    
+
+</PreferenceScreen>

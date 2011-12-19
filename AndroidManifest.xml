@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.noname.homemonitor.SettingActivity"></activity>
+        <activity android:name="com.noname.homemonitor.Setting"></activity>
     </application>
 
 </manifest>

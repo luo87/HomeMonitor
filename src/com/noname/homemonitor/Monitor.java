@@ -3,7 +3,6 @@ package com.noname.homemonitor;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -55,8 +54,7 @@ public class Monitor {
 	public boolean connect() {
 		// TODO Auto-generated method stub
 		try{
-			socket = new Socket();
-			socket.connect(new SocketAddress(), 3000, 3000);
+			socket = new Socket(server_address, server_port);
 		}catch (Exception e) {
 			// TODO: handle exception
 //			Toast.makeText(HomeMonitorActivity.this, R.string.camera_open_error, Toast.LENGTH_LONG).show();
